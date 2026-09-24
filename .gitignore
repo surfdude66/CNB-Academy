@@ -1,0 +1,12 @@
+# Local credentials and environment files
+.env
+.env.*
+*.pem
+*.p12
+*.pfx
+*.key
+
+# Python and temporary deployment artifacts
+__pycache__/
+*.pyc
+site-deploy.tar

@@ -1,0 +1,54 @@
+name: Publish GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Check for secrets before publishing
+        run: python3 scripts/check_secrets.py
+      - name: Confirm published files exist
+        run: |
+          test -f dist/index.html
+          test -f dist/css/styles.css
+          test -f dist/js/app.js
+          test -f dist/data/courses.json
+          cmp index.html dist/index.html
+          cmp css/styles.css dist/css/styles.css
+          cmp js/app.js dist/js/app.js
+          cmp data/courses.json dist/data/courses.json
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+      - name: Upload site artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
