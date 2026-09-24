@@ -1,14 +1,15 @@
 # Cook & Bake Academy
 
-![HTML5](https://img.shields.io/badge/HTML5-E34F26?logo=html5&logoColor=white) ![CSS3](https://img.shields.io/badge/CSS3-1572B6?logo=css3&logoColor=white) ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=black) ![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-deployed-222222?logo=github)
+![HTML5](https://img.shields.io/badge/HTML5-E34F26?logo=html5&logoColor=white) ![CSS3](https://img.shields.io/badge/CSS3-1572B6?logo=css3&logoColor=white) ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=black) ![SQLite](https://img.shields.io/badge/SQLite-WASM-003B57?logo=sqlite&logoColor=white) ![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-deployed-222222?logo=github)
 
-A responsive course catalogue for hands-on cooking and baking classes in Singapore. Visitors can browse 20 courses, filter Bakery or Cooking classes, search by keyword, view course details, and prepare a course sign-up.
+A responsive course catalogue for hands-on cooking and baking classes in Singapore. Visitors can browse 20 courses, filter Bakery or Cooking classes, search by keyword, view course details, ask the SQLite-powered course assistant, and prepare a course sign-up.
 
 **Live site:** [surfdude66.github.io/CNB-Academy](https://surfdude66.github.io/CNB-Academy/)
 
 ## Overview
 
-- Three-photo hero and clear paths to browse courses or use the guided course assistant.
+- Three-photo hero and clear paths to browse courses or open the course assistant.
+- Bottom-right course assistant answers fee and intake questions from SQLite course tables and searches academy policies, campuses, FAQs, and brochures with FTS5. It runs in the browser without an external AI service.
 - Course cards rendered from `data/courses.json`; fees are never hard-coded in the page.
 - Bakery and Cooking filters, search, two campus sections, and a reserved FAQ section.
 - A shared sign-up dialog with course-specific intakes, inline validation, and a nut-allergy warning. Consent to contact and optional marketing opt-in are separate.
@@ -18,7 +19,7 @@ A responsive course catalogue for hands-on cooking and baking classes in Singapo
 
 ## Installation and local preview
 
-No package manager or framework is required. Clone the repository and serve it over HTTP so the browser can fetch the course JSON file:
+No package manager or framework is needed to preview the committed site. Clone the repository and serve it over HTTP so the browser can fetch the course JSON and SQLite files:
 
 ```bash
 git clone https://github.com/surfdude66/CNB-Academy.git
@@ -26,7 +27,16 @@ cd CNB-Academy
 python -m http.server 8765
 ```
 
-Open [http://localhost:8765](http://localhost:8765). Python 3 is the only tool needed for this local preview. Opening `index.html` directly as a `file://` page may block the JSON fetch.
+Open [http://localhost:8765](http://localhost:8765). Python 3 is the only tool needed for this local preview. Opening `index.html` directly as a `file://` page may block the data fetches.
+
+To rebuild the knowledge base after editing `kb/*.md`, `kb/brochures/*.md`, or `data/courses.json`, use Node.js 22 or later:
+
+```bash
+npm ci
+npm run build:kb
+```
+
+The build exports `data/academy.db`, copies it and the Markdown sources into `dist/`, and vendors the official SQLite WASM browser files. It prints the top FTS5 hits for three sample questions.
 
 ## Architecture
 
@@ -35,14 +45,19 @@ index.html               Page structure and accessible controls
 admin.html               Browser-local sign-up list and CSV export
 css/styles.css           Layout, brand styles, and responsive rules
 js/app.js                JSON loading, filtering, dialogs, and sign-up flow
+js/chatbot.js            Browser SQLite search and course assistant
 data/courses.json        Course content and fees
-dist/                    Static copy used by the existing Sites deployment
+data/academy.db          Exported SQLite database
+kb/                      Academy policies, FAQs, campus details, and brochures
+scripts/build-kb.mjs     Rebuilds the database and published knowledge assets
+vendor/sqlite/           Browser copy of the official SQLite WASM build
+dist/                    Static copy published by Sites and GitHub Pages
 .github/workflows/pages.yml  GitHub Pages deployment from dist/
 .agents/commands/publish-to-github.md  Repeatable publishing workflow
 scripts/check_secrets.py Pre-publication secret scan
 ```
 
-The browser requests `data/courses.json`, then `js/app.js` builds the cards and applies category and text filters. Course detail dialogs read from the same data object. The GitHub Pages workflow publishes only `dist/`; when site files change, copy the matching `index.html`, `css/`, `js/`, and `data/` files into `dist/` before publishing.
+The browser requests `data/courses.json`, then `js/app.js` builds the cards and applies category and text filters. Course detail dialogs read from the same data object. When a visitor opens the assistant, `js/chatbot.js` loads `data/academy.db` with SQLite WASM. The GitHub Pages workflow publishes only `dist/`; keep its site files and data in sync with the source before publishing.
 
 ## Publishing and security
 
