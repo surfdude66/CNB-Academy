@@ -25,7 +25,7 @@ function imageURL(id, width = 720) {
 
 function card(course) {
   const title = escapeHTML(course.title);
-  return `<article class="course-card">
+  return `<article class="course-card" id="course-${escapeHTML(course.code)}">
     <div class="card-photo"><img src="${imageURL(course.img)}" alt="${title} course food" loading="lazy" width="720" height="520"></div>
     <div class="card-body">
       <div class="card-meta"><span>${escapeHTML(course.code)}</span><span>${escapeHTML(course.level)}</span></div>

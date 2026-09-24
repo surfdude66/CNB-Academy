@@ -28,7 +28,8 @@ jobs:
           test -f dist/admin.html
           test -f dist/css/styles.css
           test -f dist/js/app.js
-          test -f dist/js/chatbot.js
+          test -f dist/js/chat.js
+          test -f dist/js/rag.js
           test -f dist/data/courses.json
           test -f dist/data/academy.db
           test -f dist/vendor/sqlite/index.mjs
@@ -37,7 +38,8 @@ jobs:
           cmp admin.html dist/admin.html
           cmp css/styles.css dist/css/styles.css
           cmp js/app.js dist/js/app.js
-          cmp js/chatbot.js dist/js/chatbot.js
+          cmp js/chat.js dist/js/chat.js
+          cmp js/rag.js dist/js/rag.js
           cmp data/courses.json dist/data/courses.json
           cmp data/academy.db dist/data/academy.db
           cmp vendor/sqlite/index.mjs dist/vendor/sqlite/index.mjs

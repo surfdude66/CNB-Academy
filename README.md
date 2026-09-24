@@ -9,7 +9,7 @@ A responsive course catalogue for hands-on cooking and baking classes in Singapo
 ## Overview
 
 - Three-photo hero and clear paths to browse courses or open the course assistant.
-- Bottom-right course assistant answers fee and intake questions from SQLite course tables and searches academy policies, campuses, FAQs, and brochures with FTS5. It runs in the browser without an external AI service.
+- Bottom-right course assistant loads SQLite WASM in the browser, answers price comparisons from course tables, and searches academy policies, campuses, FAQs, and brochures with safely quoted FTS5 terms. It links to its sources and does not use an external AI service.
 - Course cards rendered from `data/courses.json`; fees are never hard-coded in the page.
 - Bakery and Cooking filters, search, two campus sections, and a reserved FAQ section.
 - A shared sign-up dialog with course-specific intakes, inline validation, and a nut-allergy warning. Consent to contact and optional marketing opt-in are separate.
@@ -34,9 +34,10 @@ To rebuild the knowledge base after editing `kb/*.md`, `kb/brochures/*.md`, or `
 ```bash
 npm ci
 npm run build:kb
+npm run eval
 ```
 
-The build exports `data/academy.db`, copies it and the Markdown sources into `dist/`, and vendors the official SQLite WASM browser files. It prints the top FTS5 hits for three sample questions.
+The build exports `data/academy.db`, copies it and the Markdown sources into `dist/`, and vendors the official SQLite WASM browser files. The evaluation uses the same retrieval module as the browser assistant and checks 30 example questions.
 
 ## Architecture
 
@@ -45,11 +46,14 @@ index.html               Page structure and accessible controls
 admin.html               Browser-local sign-up list and CSV export
 css/styles.css           Layout, brand styles, and responsive rules
 js/app.js                JSON loading, filtering, dialogs, and sign-up flow
-js/chatbot.js            Browser SQLite search and course assistant
+js/chat.js               Browser SQLite chat panel and source links
+js/rag.js                Shared FTS5 query building, retrieval, and extractive answers
 data/courses.json        Course content and fees
 data/academy.db          Exported SQLite database
 kb/                      Academy policies, FAQs, campus details, and brochures
 scripts/build-kb.mjs     Rebuilds the database and published knowledge assets
+scripts/eval.mjs         Checks shared retrieval against example questions
+eval/golden-questions.csv  Evaluation questions and expected sources
 vendor/sqlite/           Browser copy of the official SQLite WASM build
 dist/                    Static copy published by Sites and GitHub Pages
 .github/workflows/pages.yml  GitHub Pages deployment from dist/
@@ -57,7 +61,7 @@ dist/                    Static copy published by Sites and GitHub Pages
 scripts/check_secrets.py Pre-publication secret scan
 ```
 
-The browser requests `data/courses.json`, then `js/app.js` builds the cards and applies category and text filters. Course detail dialogs read from the same data object. When a visitor opens the assistant, `js/chatbot.js` loads `data/academy.db` with SQLite WASM. The GitHub Pages workflow publishes only `dist/`; keep its site files and data in sync with the source before publishing.
+The browser requests `data/courses.json`, then `js/app.js` builds the cards and applies category and text filters. Course detail dialogs read from the same data object. When a visitor opens the assistant, `js/chat.js` loads `data/academy.db` with SQLite WASM and uses `js/rag.js` to search it. The GitHub Pages workflow publishes only `dist/`; keep its site files and data in sync with the source before publishing.
 
 ## Publishing and security
 
