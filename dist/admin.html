@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en-SG">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sign-up export | Cook & Bake Academy</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    .admin-page{min-height:100vh;padding:clamp(24px,5vw,72px) 0}.admin-page h1{font-size:clamp(38px,5vw,60px)}.admin-panel{background:#fff;padding:clamp(24px,4vw,40px);border:1px solid var(--line)}.admin-panel p{line-height:1.6}.admin-panel .button{margin-top:12px}.admin-panel .button:disabled{opacity:.5;cursor:not-allowed}.admin-status{color:var(--muted)}.signup-list{display:grid;gap:12px;list-style:none;padding:0}.signup-list li{padding:14px;border:1px solid var(--line);overflow-wrap:anywhere}.signup-list strong{display:block}.signup-list span{display:block;font-size:13px;color:var(--muted);margin-top:4px}
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <main id="main" class="admin-page shell">
+    <a href="index.html">← Back to courses</a>
+    <section class="admin-panel" aria-labelledby="admin-title">
+      <p class="eyebrow">LOCAL SIGN-UPS</p>
+      <h1 id="admin-title">Export sign-ups</h1>
+      <p>Sign-ups are saved only in this browser on this device. This page has no access to entries from other browsers or devices.</p>
+      <p id="admin-status" class="admin-status" role="status" aria-live="polite">Loading saved sign-ups…</p>
+      <button id="export-button" class="button button-primary" type="button" disabled>Export CSV ↗</button>
+      <ul id="signup-list" class="signup-list" aria-label="Saved sign-ups"></ul>
+    </section>
+  </main>
+  <script>
+    const storageKey = 'cb_signups';
+    const columns = ['ref', 'submitted', 'course_code', 'course_title', 'intake', 'full_name', 'email', 'mobile', 'experience', 'allergies', 'marketing_opt_in', 'paid'];
+    const status = document.querySelector('#admin-status');
+    const button = document.querySelector('#export-button');
+    let signups = [];
+
+    function csvCell(value, column) {
+      let text = String(value ?? '');
+      // Spreadsheet apps can evaluate cells that begin with formula characters.
+      if (column !== 'mobile' && /^[\s\t\r\n]*[=+\-@]/.test(text)) text = `'${text}`;
+      return `"${text.replace(/"/g, '""')}"`;
+    }
+
+    try {
+      const stored = JSON.parse(localStorage.getItem(storageKey) || '[]');
+      if (!Array.isArray(stored)) throw new Error('Invalid saved sign-ups');
+      signups = stored;
+      status.textContent = `${signups.length} ${signups.length === 1 ? 'sign-up' : 'sign-ups'} saved in this browser.`;
+      button.disabled = signups.length === 0;
+      const list = document.querySelector('#signup-list');
+      signups.forEach(signup => {
+        const item = document.createElement('li');
+        const name = document.createElement('strong');
+        const details = document.createElement('span');
+        name.textContent = `${signup.ref || 'No reference'} · ${signup.full_name || 'Unnamed'}`;
+        details.textContent = `${signup.course_code || ''} · ${signup.course_title || ''} · ${signup.intake || ''} · ${signup.email || ''}`;
+        item.append(name, details);
+        list.append(item);
+      });
+    } catch (error) {
+      status.textContent = 'Saved sign-ups could not be read from this browser.';
+    }
+
+    button.addEventListener('click', () => {
+      const rows = signups.map(signup => columns.map(column => signup[column]));
+      const csv = columns.join(',') + '\r\n' + rows.map(row => row.map((value, index) => csvCell(value, columns[index])).join(',')).join('\r\n') + '\r\n';
+      const url = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'signups.csv';
+      document.body.append(link);
+      link.click();
+      link.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    });
+  </script>
+</body>
+</html>

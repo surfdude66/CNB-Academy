@@ -25,10 +25,12 @@ jobs:
       - name: Confirm published files exist
         run: |
           test -f dist/index.html
+          test -f dist/admin.html
           test -f dist/css/styles.css
           test -f dist/js/app.js
           test -f dist/data/courses.json
           cmp index.html dist/index.html
+          cmp admin.html dist/admin.html
           cmp css/styles.css dist/css/styles.css
           cmp js/app.js dist/js/app.js
           cmp data/courses.json dist/data/courses.json

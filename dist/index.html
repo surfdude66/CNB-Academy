@@ -96,6 +96,28 @@
   <footer class="site-footer"><div class="shell footer-inner"><div class="footer-brand">COOK <span>&</span> BAKE <small>ACADEMY</small></div><p>Make something good.</p><a href="#top">Back to top ↑</a></div></footer>
 
   <dialog id="course-dialog" class="modal" aria-labelledby="detail-title"><button class="modal-close" type="button" data-close-dialog aria-label="Close course details">×</button><div id="course-detail"></div></dialog>
+  <dialog id="signup-dialog" class="modal signup-modal" aria-labelledby="signup-title">
+    <button class="modal-close" type="button" data-close-dialog aria-label="Close sign-up form">×</button>
+    <div id="signup-content">
+      <p class="eyebrow">JOIN A CLASS</p>
+      <h2 id="signup-title">Sign up for a course</h2>
+      <dl id="signup-course" class="detail-grid signup-course" aria-label="Selected course"></dl>
+      <p class="signup-note">Your details are saved in this browser only. This form does not send a booking to the academy.</p>
+      <form id="signup-form" novalidate>
+        <div class="signup-field"><label for="signup-intake">Intake <span aria-hidden="true">*</span></label><select id="signup-intake" name="intake" required aria-describedby="error-intake"></select><p class="field-error" id="error-intake"></p></div>
+        <div class="signup-field"><label for="signup-name">Full name <span aria-hidden="true">*</span></label><input id="signup-name" name="full_name" type="text" autocomplete="name" required aria-describedby="error-name"><p class="field-error" id="error-name"></p></div>
+        <div class="signup-field"><label for="signup-email">Email <span aria-hidden="true">*</span></label><input id="signup-email" name="email" type="email" autocomplete="email" required aria-describedby="error-email"><p class="field-error" id="error-email"></p></div>
+        <div class="signup-field"><label for="signup-mobile">Singapore mobile <span aria-hidden="true">*</span></label><input id="signup-mobile" name="mobile" type="tel" autocomplete="tel" inputmode="tel" placeholder="9123 4567" required aria-describedby="error-mobile"><p class="field-error" id="error-mobile"></p></div>
+        <div class="signup-field"><label for="signup-experience">Experience <span aria-hidden="true">*</span></label><select id="signup-experience" name="experience" required aria-describedby="error-experience"><option value="">Choose your experience</option><option>None</option><option>Some</option><option>Confident</option></select><p class="field-error" id="error-experience"></p></div>
+        <div class="signup-field"><label for="signup-allergies">Allergies or dietary needs</label><textarea id="signup-allergies" name="allergies" rows="3" aria-describedby="allergy-warning"></textarea><p class="allergy-warning" id="allergy-warning" role="status" hidden></p></div>
+        <div class="signup-check"><input id="signup-consent" name="consent" type="checkbox" required aria-describedby="error-consent"><label for="signup-consent">I agree to be contacted about this sign-up. <span aria-hidden="true">*</span></label></div><p class="field-error" id="error-consent"></p>
+        <div class="signup-check"><input id="signup-newsletter" name="newsletter" type="checkbox"><label for="signup-newsletter">I opt in to marketing emails about future classes (optional).</label></div>
+        <p class="field-error" id="signup-storage-error" role="alert"></p>
+        <button class="button button-primary signup-submit" type="submit">Save sign-up ↗</button>
+      </form>
+    </div>
+    <div id="signup-success" hidden role="status" aria-live="polite"></div>
+  </dialog>
   <dialog id="assistant-dialog" class="modal assistant-modal" aria-labelledby="assistant-title"><button class="modal-close" type="button" data-close-dialog aria-label="Close course assistant">×</button><p class="eyebrow">LET'S FIND YOUR CLASS</p><h2 id="assistant-title">What would you like to make?</h2><p>Choose a starting point. We’ll show you matching courses.</p><div class="assistant-options"><button type="button" data-assistant-category="Bakery">Bake something <span aria-hidden="true">↗</span></button><button type="button" data-assistant-category="Cooking">Cook something <span aria-hidden="true">↗</span></button><button type="button" data-assistant-category="All" data-assistant-search="Beginner">Start as a beginner <span aria-hidden="true">↗</span></button></div></dialog>
 </body>
 </html>
