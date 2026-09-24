@@ -10,3 +10,8 @@
 __pycache__/
 *.pyc
 site-deploy.tar
+
+# Knowledge-base build dependencies and npm cache
+node_modules/
+.npm-cache/
+.sites-runtime/

@@ -1,0 +1,11 @@
+{
+  "name": "cnb-academy",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build:kb": "node scripts/build-kb.mjs"
+  },
+  "dependencies": {
+    "@sqlite.org/sqlite-wasm": "3.53.4-build1"
+  }
+}

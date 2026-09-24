@@ -7,8 +7,9 @@
   <meta name="description" content="Hands-on cooking and baking classes in Singapore. Build skills you can use again at home.">
   <title>Cook & Bake Academy | Learn it. Make it yours.</title>
   <link rel="preconnect" href="https://images.unsplash.com">
-  <link rel="stylesheet" href="css/styles.css?v=signup-1">
-  <script src="js/app.js?v=signup-1" defer></script>
+  <link rel="stylesheet" href="css/styles.css?v=chat-1">
+  <script src="js/app.js?v=chat-1" defer></script>
+  <script type="module" src="js/chatbot.js?v=chat-1"></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -118,6 +119,26 @@
     </div>
     <div id="signup-success" hidden role="status" aria-live="polite"></div>
   </dialog>
-  <dialog id="assistant-dialog" class="modal assistant-modal" aria-labelledby="assistant-title"><button class="modal-close" type="button" data-close-dialog aria-label="Close course assistant">×</button><p class="eyebrow">LET'S FIND YOUR CLASS</p><h2 id="assistant-title">What would you like to make?</h2><p>Choose a starting point. We’ll show you matching courses.</p><div class="assistant-options"><button type="button" data-assistant-category="Bakery">Bake something <span aria-hidden="true">↗</span></button><button type="button" data-assistant-category="Cooking">Cook something <span aria-hidden="true">↗</span></button><button type="button" data-assistant-category="All" data-assistant-search="Beginner">Start as a beginner <span aria-hidden="true">↗</span></button></div></dialog>
+  <aside class="chatbot" aria-label="Course assistant">
+    <section class="chatbot-panel" id="chatbot-panel" aria-labelledby="chatbot-title" hidden>
+      <div class="chatbot-header">
+        <div><span class="chatbot-kicker">COOK & BAKE ACADEMY</span><h2 id="chatbot-title">Ask our course assistant</h2><p>Answers from our courses and guide</p></div>
+        <button class="chatbot-close" id="chatbot-close" type="button" aria-label="Close course assistant">×</button>
+      </div>
+      <div class="chatbot-messages" id="chatbot-messages" role="log" aria-live="polite" aria-relevant="additions text">
+        <div class="chatbot-message chatbot-message-assistant"><p>Hello! Ask me about courses, fees, dates, allergies, campuses, or academy policies.</p></div>
+      </div>
+      <div class="chatbot-suggestions" id="chatbot-suggestions" aria-label="Suggested questions">
+        <button type="button" data-chat-prompt="What is the refund policy?">Refund policy</button>
+        <button type="button" data-chat-prompt="Can I take macarons with a nut allergy?">Macaron allergies</button>
+        <button type="button" data-chat-prompt="Is there parking at Bukit Timah?">Bukit Timah parking</button>
+      </div>
+      <form class="chatbot-form" id="chatbot-form">
+        <label for="chatbot-input">Your question</label>
+        <div class="chatbot-input-row"><input id="chatbot-input" name="question" type="text" maxlength="240" autocomplete="off" placeholder="Ask a question…" required><button type="submit" aria-label="Send question">↗</button></div>
+      </form>
+    </section>
+    <button class="chatbot-launcher" id="chatbot-launcher" type="button" aria-controls="chatbot-panel" aria-expanded="false"><span class="chatbot-launcher-icon" aria-hidden="true">✳</span><span>Ask us</span></button>
+  </aside>
 </body>
 </html>

@@ -8,7 +8,6 @@ const signupDialog = document.querySelector('#signup-dialog');
 const signupForm = document.querySelector('#signup-form');
 const signupCourse = document.querySelector('#signup-course');
 const allergyWarning = document.querySelector('#allergy-warning');
-const assistantDialog = document.querySelector('#assistant-dialog');
 const courseDetail = document.querySelector('#course-detail');
 const money = new Intl.NumberFormat('en-SG', { style: 'currency', currency: 'SGD', maximumFractionDigits: 0 });
 let courses = [];
@@ -211,13 +210,6 @@ document.querySelectorAll('[data-campus]').forEach(button => button.addEventList
   document.querySelector('#courses').scrollIntoView({ behavior: 'smooth' });
 }));
 
-document.querySelector('[data-open-assistant]').addEventListener('click', () => assistantDialog.showModal());
-document.querySelectorAll('[data-assistant-category]').forEach(button => button.addEventListener('click', () => {
-  searchInput.value = button.dataset.assistantSearch || '';
-  selectCategory(button.dataset.assistantCategory);
-  assistantDialog.close();
-  document.querySelector('#courses').scrollIntoView({ behavior: 'smooth' });
-}));
 document.querySelectorAll('[data-close-dialog]').forEach(button => button.addEventListener('click', () => button.closest('dialog').close()));
 document.querySelectorAll('dialog').forEach(dialog => dialog.addEventListener('click', event => {
   if (event.target === dialog) dialog.close();
