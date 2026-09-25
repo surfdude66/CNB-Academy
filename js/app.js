@@ -14,9 +14,58 @@ let courses = [];
 let category = 'All';
 let signupCourseCode = null;
 const signupsKey = 'cb_signups';
+const workshopSeenKey = 'cb_workshop_invitation_seen';
+const workshopDialog = document.querySelector('#workshop-dialog');
+const workshopForm = document.querySelector('#workshop-form');
+let workshopDate = '';
+const leadMagnetForm = document.querySelector('#lead-magnet-form');
+const leadEntriesKey = 'cb_lead_magnet_optins';
+const leadGuidePath = 'output/pdf/home-bakers-sourdough-starter-guide.pdf';
 
 function escapeHTML(value) {
   return String(value ?? '').replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]);
+}
+
+function saveLeadMagnetRequest(event) {
+  event.preventDefault();
+  const email = leadMagnetForm.elements.email.value.trim();
+  const consent = leadMagnetForm.elements.consent.checked;
+  const emailError = email && leadMagnetForm.elements.email.validity.valid ? '' : 'Enter a valid email address.';
+  const consentError = consent ? '' : 'Consent is required to save your guide request.';
+  document.querySelector('#lead-email-error').textContent = emailError;
+  document.querySelector('#lead-consent-error').textContent = consentError;
+  document.querySelector('#lead-storage-error').textContent = '';
+  leadMagnetForm.elements.email.toggleAttribute('aria-invalid', Boolean(emailError));
+  leadMagnetForm.elements.consent.toggleAttribute('aria-invalid', Boolean(consentError));
+  if (emailError || consentError) {
+    (emailError ? leadMagnetForm.elements.email : leadMagnetForm.elements.consent).focus();
+    return;
+  }
+  const params = new URLSearchParams(location.search);
+  const utm = Object.fromEntries(['utm_source', 'utm_medium', 'utm_campaign'].map(key => {
+    const value = params.get(key) || '';
+    return [key, /^[a-z0-9_-]{1,50}$/.test(value) ? value : ''];
+  }));
+  const record = {
+    email,
+    consent: 'yes',
+    consent_date: new Date().toISOString().slice(0, 10),
+    source: 'lead magnet',
+    marketing_opt_in: leadMagnetForm.elements.newsletter.checked ? 'yes' : 'no',
+    ...utm
+  };
+  try {
+    const saved = JSON.parse(localStorage.getItem(leadEntriesKey) || '[]');
+    if (!Array.isArray(saved)) throw new Error('Invalid lead data');
+    localStorage.setItem(leadEntriesKey, JSON.stringify([...saved, record]));
+  } catch (error) {
+    document.querySelector('#lead-storage-error').textContent = 'Your request could not be saved in this browser. Check that storage is enabled and try again.';
+    return;
+  }
+  document.querySelector('#lead-magnet-success').innerHTML = `<h3 id="lead-success-title" tabindex="-1">Your guide is ready.</h3><p>Thanks. Your request is saved in this browser. Download your copy below.</p><a class="button button-primary" href="${leadGuidePath}" download>Download the guide ↗</a>`;
+  leadMagnetForm.hidden = true;
+  document.querySelector('#lead-magnet-success').hidden = false;
+  document.querySelector('#lead-success-title').focus();
 }
 
 function imageURL(id, width = 720) {
@@ -60,6 +109,77 @@ function selectCategory(next) {
 
 function formatDate(date) {
   return new Intl.DateTimeFormat('en-SG', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }).format(new Date(`${date}T00:00:00Z`));
+}
+
+function nextWorkshopDate() {
+  const parts = Object.fromEntries(new Intl.DateTimeFormat('en-GB', {
+    timeZone: 'Asia/Singapore', year: 'numeric', month: '2-digit', day: '2-digit'
+  }).formatToParts(new Date()).map(part => [part.type, part.value]));
+  const date = new Date(Date.UTC(Number(parts.year), Number(parts.month) - 1, Number(parts.day)));
+  const daysUntilWednesday = (3 - date.getUTCDay() + 7) % 7 || 7;
+  date.setUTCDate(date.getUTCDate() + daysUntilWednesday);
+  return date.toISOString().slice(0, 10);
+}
+
+function showWorkshopInvitation() {
+  if (workshopDialog.open) return;
+  if ([courseDialog, signupDialog].some(dialog => dialog.open)) {
+    [courseDialog, signupDialog].forEach(dialog => {
+      if (dialog.open) dialog.addEventListener('close', showWorkshopInvitation, { once: true });
+    });
+    return;
+  }
+  workshopDate = nextWorkshopDate();
+  document.querySelector('#workshop-when').textContent = `Next Wednesday, ${formatDate(workshopDate)}, 1:00–2:00 PM`;
+  workshopDialog.showModal();
+  document.querySelector('#workshop-title').focus();
+  try { localStorage.setItem(workshopSeenKey, '1'); } catch (error) { /* The form will report storage errors on submit. */ }
+}
+
+function saveWorkshopSignup(event) {
+  event.preventDefault();
+  const values = Object.fromEntries(new FormData(workshopForm));
+  const errors = {
+    full_name: values.full_name?.trim().length >= 2 ? '' : 'Enter your name (at least 2 characters).',
+    mobile: /^[89]\d{7}$/.test(values.mobile?.trim() || '') ? '' : 'Enter 8 digits beginning with 8 or 9.',
+    email: workshopForm.elements.email.validity.valid && values.email?.trim() ? '' : 'Enter a valid email address.'
+  };
+  const firstInvalid = Object.keys(errors).find(name => errors[name]);
+  Object.entries(errors).forEach(([name, message]) => {
+    const field = workshopForm.elements[name];
+    const errorId = name === 'full_name' ? 'name' : name;
+    document.querySelector(`#workshop-error-${errorId}`).textContent = message;
+    if (message) field.setAttribute('aria-invalid', 'true');
+    else field.removeAttribute('aria-invalid');
+  });
+  if (firstInvalid) {
+    workshopForm.elements[firstInvalid].focus();
+    return;
+  }
+  try {
+    const saved = JSON.parse(localStorage.getItem(signupsKey) || '[]');
+    if (!Array.isArray(saved)) throw new Error('Invalid sign-up data');
+    const signup = {
+      ref: `CBW-${Date.now()}`,
+      submitted: new Date().toISOString().slice(0, 10),
+      course_code: 'WORKSHOP',
+      course_title: 'Free 1-hour Pastries Workshop & Treat',
+      intake: workshopDate,
+      full_name: values.full_name.trim(),
+      email: values.email.trim(),
+      mobile: `+65 ${values.mobile.trim()}`,
+      experience: '', allergies: '', marketing_opt_in: 'no', paid: 'no'
+    };
+    localStorage.setItem(signupsKey, JSON.stringify([...saved, signup]));
+  } catch (error) {
+    document.querySelector('#workshop-storage-error').textContent = 'Your sign-up could not be saved in this browser. Check that storage is enabled and try again.';
+    return;
+  }
+  document.querySelector('#workshop-content').hidden = true;
+  document.querySelector('#workshop-success').hidden = false;
+  workshopDialog.setAttribute('aria-labelledby', 'workshop-success-title');
+  workshopDialog.removeAttribute('aria-describedby');
+  document.querySelector('#workshop-success-title').focus();
 }
 
 function openCourse(course) {
@@ -196,6 +316,25 @@ courseDetail.addEventListener('click', event => {
   }
 });
 signupForm.addEventListener('submit', saveSignup);
+workshopForm.addEventListener('submit', saveWorkshopSignup);
+leadMagnetForm.addEventListener('submit', saveLeadMagnetRequest);
+leadMagnetForm.addEventListener('input', event => {
+  if (event.target.name === 'email') {
+    event.target.removeAttribute('aria-invalid');
+    document.querySelector('#lead-email-error').textContent = '';
+  }
+  if (event.target.name === 'consent') {
+    event.target.removeAttribute('aria-invalid');
+    document.querySelector('#lead-consent-error').textContent = '';
+  }
+  document.querySelector('#lead-storage-error').textContent = '';
+});
+workshopForm.addEventListener('input', event => {
+  if (!event.target.name) return;
+  event.target.removeAttribute('aria-invalid');
+  document.querySelector(`#workshop-error-${event.target.name === 'full_name' ? 'name' : event.target.name}`).textContent = '';
+  document.querySelector('#workshop-storage-error').textContent = '';
+});
 signupForm.addEventListener('input', event => {
   if (event.target.name === 'allergies') updateAllergyWarning();
   if (event.target.name && event.target.name !== 'allergies' && event.target.name !== 'newsletter') setFieldError(event.target.name, '');
@@ -214,6 +353,12 @@ document.querySelectorAll('[data-close-dialog]').forEach(button => button.addEve
 document.querySelectorAll('dialog').forEach(dialog => dialog.addEventListener('click', event => {
   if (event.target === dialog) dialog.close();
 }));
+
+try {
+  if (localStorage.getItem(workshopSeenKey) !== '1') setTimeout(showWorkshopInvitation, 10000);
+} catch (error) {
+  setTimeout(showWorkshopInvitation, 10000);
+}
 
 fetch('data/courses.json')
   .then(response => { if (!response.ok) throw new Error(`HTTP ${response.status}`); return response.json(); })

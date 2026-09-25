@@ -13,7 +13,7 @@ const EXPANSIONS = [
 
 // These subjects are outside the academy guide even when a question also
 // contains a generic word such as "price", "campus", or "cheapest".
-const OFF_TOPIC = /\b(?:weather|forecast|hotels?|flights?|airfare|airlines?|restaurants?|laptops?|smartphones?|bitcoin|cryptocurrenc(?:y|ies)|stocks?|python|javascript|system prompt)\b/i;
+const OFF_TOPIC = /\b(?:weather|forecast|hotels?|flights?|airfare|airlines?|restaurants?|laptops?|smartphones?|bitcoin|cryptocurrenc(?:y|ies)|stocks?|python|javascript|system prompt|hidden instructions|jokes?|home address)\b/i;
 
 export function buildQuery(text) {
   const normalized = String(text ?? '').toLowerCase().normalize('NFKD')

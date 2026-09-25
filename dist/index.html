@@ -7,9 +7,9 @@
   <meta name="description" content="Hands-on cooking and baking classes in Singapore. Build skills you can use again at home.">
   <title>Cook & Bake Academy | Learn it. Make it yours.</title>
   <link rel="preconnect" href="https://images.unsplash.com">
-  <link rel="stylesheet" href="css/styles.css?v=chat-2">
-  <script src="js/app.js?v=chat-2" defer></script>
-  <script type="module" src="js/chat.js?v=chat-2"></script>
+  <link rel="stylesheet" href="css/styles.css?v=lead-magnet-1">
+  <script src="js/app.js?v=lead-magnet-1" defer></script>
+  <script type="module" src="js/chat.js?v=chat-3"></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -20,6 +20,7 @@
       </a>
       <nav aria-label="Main navigation">
         <a href="#courses">Courses</a>
+        <a href="#lead-magnet">Free guide</a>
         <a href="#campuses">Campuses</a>
         <a href="#faq">FAQ</a>
       </nav>
@@ -55,6 +56,34 @@
         <p><strong>01</strong> Learn by doing</p>
         <p><strong>02</strong> Practice with purpose</p>
         <p><strong>03</strong> Bring it home</p>
+      </div>
+    </section>
+
+    <section class="lead-magnet-section section-pad" id="lead-magnet" aria-labelledby="lead-magnet-title">
+      <div class="shell lead-magnet-layout">
+        <div class="lead-magnet-copy">
+          <p class="eyebrow"><span class="eyebrow-line"></span> FREE FOUR-PAGE GUIDE</p>
+          <h2 id="lead-magnet-title">Start your sourdough <em>with confidence.</em></h2>
+          <p>Get a simple feeding rhythm, three signs your starter is ready, and a few common stumbles to watch for in your first week.</p>
+          <div class="open-house-card" id="open-house">
+            <p class="open-house-label">YOU'RE INVITED</p>
+            <h3>Cook &amp; Bake Open House</h3>
+            <p><strong>Saturday 14 November 2026, 10am-4pm</strong><br>Free at both campuses, with live demos every hour and tastings from our learners.</p>
+            <a href="mailto:enrol@cookbakeacademy.sg?subject=Open%20House%20RSVP%20enquiry&amp;body=I%27d%20like%20to%20ask%20about%20attending%20the%20Cook%20%26%20Bake%20Open%20House%20on%2014%20November%202026.">Ask about attending ↗</a>
+          </div>
+        </div>
+        <div class="lead-magnet-panel">
+          <form id="lead-magnet-form" novalidate>
+            <div class="signup-field"><label for="lead-email">Email address <span aria-hidden="true">*</span></label><input id="lead-email" name="email" type="email" autocomplete="email" required aria-describedby="lead-email-error lead-magnet-note"><p class="field-error" id="lead-email-error"></p></div>
+            <div class="signup-check"><input id="lead-consent" name="consent" type="checkbox" required aria-describedby="lead-consent-error"><label for="lead-consent">I agree to be contacted about this guide request. <span aria-hidden="true">*</span></label></div>
+            <p class="field-error" id="lead-consent-error"></p>
+            <div class="signup-check"><input id="lead-newsletter" name="newsletter" type="checkbox"><label for="lead-newsletter">I opt in to marketing emails about future classes (optional).</label></div>
+            <p class="lead-magnet-note" id="lead-magnet-note">Your email and consent are saved in this browser only. This site does not send email or share your details with the academy.</p>
+            <p class="field-error" id="lead-storage-error" role="alert"></p>
+            <button class="button button-primary lead-submit" type="submit">Get the sourdough guide ↗</button>
+          </form>
+          <div id="lead-magnet-success" hidden role="status" aria-live="polite"></div>
+        </div>
       </div>
     </section>
 
@@ -118,12 +147,44 @@
     </div>
     <div id="signup-success" hidden role="status" aria-live="polite"></div>
   </dialog>
+  <dialog id="workshop-dialog" class="modal workshop-modal" aria-labelledby="workshop-title" aria-describedby="workshop-details workshop-note">
+    <button class="modal-close" type="button" data-close-dialog aria-label="Close workshop invitation">×</button>
+    <div id="workshop-content">
+      <p class="eyebrow">YOU'RE INVITED</p>
+      <h2 id="workshop-title" tabindex="-1">Free 1-hour Pastries Workshop &amp; Treat</h2>
+      <p id="workshop-details" class="workshop-details"><strong>When:</strong> <span id="workshop-when"></span><br><strong>Where:</strong> Our Bukit Timah campus</p>
+      <h3>Keen to join?</h3>
+      <p id="workshop-note" class="signup-note">Your details are saved in this browser only. This does not send a booking to the academy.</p>
+      <form id="workshop-form" novalidate>
+        <div class="signup-field"><label for="workshop-name">Name</label><input id="workshop-name" name="full_name" type="text" autocomplete="name" required aria-describedby="workshop-error-name"><p class="field-error" id="workshop-error-name"></p></div>
+        <div class="signup-field"><label for="workshop-mobile">Singapore mobile</label><input id="workshop-mobile" name="mobile" type="tel" autocomplete="tel" inputmode="numeric" pattern="[89][0-9]{7}" maxlength="8" placeholder="91234567" required aria-describedby="workshop-error-mobile"><p class="field-error" id="workshop-error-mobile"></p></div>
+        <div class="signup-field"><label for="workshop-email">Email</label><input id="workshop-email" name="email" type="email" autocomplete="email" required aria-describedby="workshop-error-email"><p class="field-error" id="workshop-error-email"></p></div>
+        <p class="field-error" id="workshop-storage-error" role="alert"></p>
+        <button class="button button-primary workshop-submit" type="submit">Count me in ↗</button>
+      </form>
+    </div>
+    <div id="workshop-success" hidden role="status" aria-live="polite"><h2 id="workshop-success-title" tabindex="-1">Thank you!</h2><p>Your workshop sign-up is saved in this browser.</p></div>
+  </dialog>
   <aside class="chatbot" aria-label="Course assistant">
     <section class="chatbot-panel" id="chatbot-panel" aria-labelledby="chatbot-title" hidden>
       <div class="chatbot-header">
         <div><span class="chatbot-kicker">COOK & BAKE ACADEMY</span><h2 id="chatbot-title">Ask our course assistant</h2><p>Answers from our courses and guide</p></div>
         <button class="chatbot-close" id="chatbot-close" type="button" aria-label="Close course assistant">×</button>
       </div>
+      <div class="chatbot-controls">
+        <label for="chatbot-mode">Answer mode</label>
+        <select id="chatbot-mode"><option value="search">Search</option><option value="chatgpt">ChatGPT</option></select>
+        <button id="chatbot-settings-toggle" type="button" aria-controls="chatbot-settings" aria-expanded="false">Settings</button>
+      </div>
+      <form id="chatbot-settings" class="chatbot-settings" hidden>
+        <label for="chatbot-api-key">OpenAI API key</label>
+        <input id="chatbot-api-key" type="password" autocomplete="off" spellcheck="false" placeholder="Paste your API key">
+        <label for="chatbot-model">Model</label>
+        <select id="chatbot-model"><option value="gpt-6-luna">gpt-6-luna</option><option value="gpt-6-sol">gpt-6-sol</option></select>
+        <div class="chatbot-settings-actions"><button type="submit">Save for this tab</button><button id="chatbot-clear-key" type="button">Clear key</button></div>
+        <p>Your key stays in this tab's session storage. ChatGPT requests go directly to OpenAI.</p>
+        <p id="chatbot-settings-status" role="status" aria-live="polite"></p>
+      </form>
       <div class="chatbot-messages" id="chatbot-messages" role="log" aria-live="polite" aria-relevant="additions text">
         <div class="chatbot-message chatbot-message-assistant"><p>Hello! Ask me about courses, fees, dates, allergies, campuses, or academy policies.</p></div>
       </div>

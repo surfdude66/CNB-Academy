@@ -29,21 +29,25 @@ jobs:
           test -f dist/css/styles.css
           test -f dist/js/app.js
           test -f dist/js/chat.js
+          test -f dist/js/chatgpt.js
           test -f dist/js/rag.js
           test -f dist/data/courses.json
           test -f dist/data/academy.db
           test -f dist/vendor/sqlite/index.mjs
           test -f dist/vendor/sqlite/sqlite3.wasm
+          test -f dist/output/pdf/home-bakers-sourdough-starter-guide.pdf
           cmp index.html dist/index.html
           cmp admin.html dist/admin.html
           cmp css/styles.css dist/css/styles.css
           cmp js/app.js dist/js/app.js
           cmp js/chat.js dist/js/chat.js
+          cmp js/chatgpt.js dist/js/chatgpt.js
           cmp js/rag.js dist/js/rag.js
           cmp data/courses.json dist/data/courses.json
           cmp data/academy.db dist/data/academy.db
           cmp vendor/sqlite/index.mjs dist/vendor/sqlite/index.mjs
           cmp vendor/sqlite/sqlite3.wasm dist/vendor/sqlite/sqlite3.wasm
+          cmp output/pdf/home-bakers-sourdough-starter-guide.pdf dist/output/pdf/home-bakers-sourdough-starter-guide.pdf
           diff -qr kb dist/kb
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5

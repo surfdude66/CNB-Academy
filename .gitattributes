@@ -1,2 +1,3 @@
 vendor/sqlite/index.mjs -whitespace
 dist/vendor/sqlite/index.mjs -whitespace
+*.pdf binary

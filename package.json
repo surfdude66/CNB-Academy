@@ -3,8 +3,10 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "check": "node scripts/check.mjs",
     "build:kb": "node scripts/build-kb.mjs",
-    "eval": "node scripts/eval.mjs"
+    "eval": "node scripts/eval.mjs",
+    "test:chatgpt": "node scripts/test-chatgpt.mjs"
   },
   "dependencies": {
     "@sqlite.org/sqlite-wasm": "3.53.4-build1"

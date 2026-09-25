@@ -21,3 +21,93 @@
 .intro-grid p{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding-block:24px;text-align:center}
 .intro-grid strong{display:block;margin-right:0}
 @media(max-width:580px){.intro-grid p{padding-block:20px}}
+.chatbot-controls{display:flex;align-items:center;gap:8px;padding:10px 16px;border-bottom:1px solid var(--line);background:#fffaf4}.chatbot-controls label,.chatbot-settings label{color:#68594d;font-size:12px;font-weight:800}.chatbot-controls select{flex:1;min-width:0}.chatbot-controls select,.chatbot-controls button,.chatbot-settings input,.chatbot-settings select,.chatbot-settings button{min-height:36px;border:1px solid #baaa9b;border-radius:6px;background:#fff;color:var(--ink);font:inherit}.chatbot-controls select,.chatbot-settings input,.chatbot-settings select{padding:5px 8px}.chatbot-controls button,.chatbot-settings button{padding:5px 10px;cursor:pointer}.chatbot-settings{display:grid;gap:7px;padding:14px 16px;border-bottom:1px solid var(--line);background:#fffaf4;overflow-y:auto;max-height:260px}.chatbot-settings[hidden]{display:none}.chatbot-settings label{margin-top:4px}.chatbot-settings input,.chatbot-settings select{width:100%;font-size:14px}.chatbot-settings-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:5px}.chatbot-settings-actions button:first-child{background:var(--crust);border-color:var(--crust);color:#fff}.chatbot-settings p{margin:0;color:#68594d;font-size:12px;line-height:1.4}.chatbot-settings p[role="status"]{min-height:1em;font-weight:700}
+
+/* Catalogue presentation: keep the academy's existing palette and type. */
+.hero-grid{grid-template-columns:minmax(0,.94fr) minmax(0,1.06fr);gap:clamp(36px,4.5vw,76px);min-height:690px}
+.hero-copy{padding-block:78px 70px}
+.hero h1{max-width:610px;font-size:clamp(62px,5.65vw,84px);line-height:1.015;letter-spacing:-.052em;margin-bottom:30px}
+.hero-pitch{max-width:440px;font-size:18px;line-height:1.68}
+.hero-proof{margin-top:50px}
+.hero-visual{height:590px}
+.hero-photo-main{left:0;top:3%;width:68%;height:94%;border-radius:200px 200px 4px 4px}
+.hero-photo-top{right:0;top:0;width:28%;height:43%;border-radius:110px 110px 4px 4px}
+.hero-photo-bottom{right:0;bottom:0;width:28%;height:50%;border-radius:4px}
+.photo-stamp{left:61%;top:43%;width:100px;height:100px}
+.hero-footer{border-top:1px solid #e8d9c9}
+
+.courses-section .section-heading{margin-bottom:44px}
+.course-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:30px 24px}
+.course-card{border-color:var(--line);box-shadow:0 2px 0 #2b211b08;transition:border-color .2s,box-shadow .2s,transform .2s}
+.course-card:hover{border-color:#c8ad94;box-shadow:0 15px 30px #4c332014;transform:translateY(-2px)}
+.card-photo{aspect-ratio:1.48}
+.card-body{padding:23px 24px 0}
+.card-meta{margin-bottom:18px;font-size:11px}
+.card-campus{font-size:12px;margin-bottom:9px}
+.course-card h3{font-size:27px;line-height:1.16;margin-bottom:12px}
+.card-summary{font-size:13px;line-height:1.62;margin-bottom:24px}
+.card-facts{gap:12px;border-color:var(--line);padding:17px 0}
+.card-facts dt{font-size:10px}
+.card-facts dd{font-size:12px;line-height:1.4}
+.card-bottom{border-color:var(--line);padding:17px 24px 19px}
+.card-price strong{font-size:28px}
+.card-actions{gap:7px}
+.card-bottom button{font-size:12px;padding:4px 0}
+
+.signup-modal{width:min(100% - 32px,760px);max-height:min(90dvh,940px);padding:38px 44px 42px;border:1px solid #d8c4af;border-radius:6px;overflow-y:auto;overscroll-behavior:contain}
+.signup-modal .modal-close{position:sticky;float:right;right:0;top:0;z-index:2;display:grid;place-items:center;width:36px;height:36px;margin:-14px -20px 0 0;border:1px solid #d3bea9;border-radius:50%;background:var(--cream);font-size:27px}
+.signup-modal h2{font-size:43px;margin:12px 40px 24px 0}
+.signup-modal .detail-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:17px 26px;margin-inline:-44px;padding:24px 44px;background:#f4eadf;border-color:#dfcdbb}
+.signup-modal .detail-grid dt{font-size:10px}
+.signup-modal .detail-grid dd{font-size:13px}
+.signup-note{max-width:62ch;margin:22px 0 25px;font-size:13px;line-height:1.6}
+#signup-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:22px;row-gap:18px}
+#signup-form>.signup-field{min-width:0;margin:0}
+#signup-form>.signup-field:first-child,#signup-form>.signup-field:nth-child(6),#signup-form>.signup-check,#signup-form>#error-consent,#signup-form>#signup-storage-error,#signup-form>.signup-submit{grid-column:1/-1}
+.signup-field label{font-size:13px;margin-bottom:8px}
+.signup-field input,.signup-field select,.signup-field textarea{min-height:48px;padding:11px 13px;border-color:#bda996;border-radius:3px;font-size:15px}
+.signup-field input:focus,.signup-field select:focus,.signup-field textarea:focus{border-color:var(--basil)}
+.signup-check{margin:0}
+#signup-form>#error-consent:empty,#signup-form>#signup-storage-error:empty{display:none}
+.signup-submit{justify-self:start;margin-top:4px;min-width:220px}
+
+@media(max-width:1100px){.hero-grid{gap:32px}.hero h1{font-size:clamp(56px,6vw,72px)}.course-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:800px){.hero-grid{grid-template-columns:1fr;gap:0;min-height:0}.hero-copy{padding:60px 0 30px}.hero h1{max-width:700px;font-size:clamp(56px,9vw,74px)}.hero-visual{height:460px}.hero-photo-main{left:0}.course-grid{gap:24px}}
+@media(max-width:580px){.hero-copy{padding:52px 0 24px}.hero h1{font-size:clamp(48px,12.6vw,65px);line-height:1.03;margin-bottom:22px}.hero-pitch{font-size:16px;line-height:1.65}.hero-proof{margin-top:30px}.hero-visual{height:335px}.hero-photo-main{width:65%;height:94%;border-radius:120px 120px 3px 3px}.hero-photo-top,.hero-photo-bottom{width:31%}.photo-stamp{left:58%;top:42%;width:74px;height:74px}.hero-footer{border-top:0}.courses-section .section-heading{margin-bottom:28px}.course-grid{grid-template-columns:1fr;gap:21px}.card-photo{aspect-ratio:1.5}.card-body{padding:22px 21px 0}.course-card h3{font-size:26px}.card-bottom{padding-inline:21px}.signup-modal{width:min(100% - 20px,590px);max-height:92dvh;padding:27px 20px 32px}.signup-modal .modal-close{margin:-9px -2px 0 0}.signup-modal h2{font-size:33px;margin-bottom:18px}.signup-modal .detail-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:13px;margin-inline:-20px;padding:20px}.signup-note{margin:18px 0 23px}#signup-form{grid-template-columns:1fr;row-gap:17px}#signup-form>.signup-field:first-child,#signup-form>.signup-field:nth-child(6),#signup-form>.signup-check,#signup-form>#error-consent,#signup-form>#signup-storage-error,#signup-form>.signup-submit{grid-column:auto}.signup-submit{width:100%;justify-self:stretch}}
+
+.workshop-modal{width:min(100% - 32px,510px);max-height:90dvh;overflow-y:auto;border-color:#d8c4af;border-radius:8px;padding:36px 40px 40px}
+.workshop-modal h2{font-size:clamp(31px,5vw,42px);margin-right:32px}
+.workshop-modal h2[tabindex="-1"]:focus{outline:none}
+.workshop-modal h3{font-size:25px;margin:24px 0 6px}
+.workshop-details{padding:18px 20px;background:#f4eadf;border-left:4px solid var(--crust);font-size:14px;line-height:1.9}
+.workshop-modal .signup-note{margin:0 0 18px}
+.workshop-modal .signup-field{margin:13px 0}
+.workshop-submit{width:100%;margin-top:12px}
+.workshop-modal [hidden]{display:none}
+#workshop-success p{line-height:1.6}
+@media(max-width:580px){.workshop-modal{width:calc(100% - 20px);max-height:92dvh;padding:28px 22px 32px}}
+
+.lead-magnet-section{background:#f0e7db}
+.lead-magnet-layout{display:grid;grid-template-columns:1.05fr .95fr;gap:70px;align-items:center}
+.lead-magnet-copy h2{max-width:620px;font-size:clamp(42px,4vw,62px);line-height:1.1;letter-spacing:-.045em;margin:0 0 20px}
+.lead-magnet-copy>p:not(.eyebrow){max-width:520px;font-size:15px;line-height:1.75;color:#62574e}
+.open-house-card{margin-top:34px;padding:24px 26px;background:#fffaf4;border:1px solid #dfd1c1;border-left:4px solid var(--basil)}
+.open-house-label{margin:0 0 10px;color:var(--crust-dark);font-size:10px;font-weight:800;letter-spacing:.14em}
+.open-house-card h3{font-size:24px;margin:0 0 10px}
+.open-house-card p:not(.open-house-label){font-size:13px;line-height:1.65;color:#62574e;margin:0 0 13px}
+.open-house-card a{color:var(--crust-dark);font-size:12px;font-weight:800;border-bottom:1px solid var(--crust);padding-bottom:4px}
+.lead-magnet-panel{background:var(--cream);border:1px solid #dfd1c1;padding:34px 36px;box-shadow:0 18px 45px #4c332010}
+#lead-magnet-form{display:grid;gap:17px}
+#lead-magnet-form .signup-field{margin:0}
+#lead-magnet-form .signup-field input{width:100%;min-height:50px;padding:12px;border:1px solid #bda996;border-radius:3px;background:#fff;font-size:15px}
+#lead-magnet-form .signup-check{display:flex;align-items:flex-start;gap:10px}
+#lead-magnet-form .signup-check input{width:18px;height:18px;flex:0 0 18px;margin:2px 0 0;accent-color:var(--basil)}
+#lead-magnet-form .signup-check label{font-size:12px;line-height:1.55}
+.lead-magnet-note{margin:0;color:var(--muted);font-size:11px;line-height:1.6}
+#lead-email-error:empty,#lead-consent-error:empty,#lead-storage-error:empty{display:none}
+.lead-submit{width:100%;justify-content:center}
+#lead-magnet-success h3{font-size:28px;margin-bottom:10px}
+#lead-magnet-success p{color:var(--muted);font-size:13px;line-height:1.6}
+#lead-magnet-success .button{width:100%;justify-content:center}
+@media(max-width:800px){.lead-magnet-layout{grid-template-columns:1fr;gap:34px}}
+@media(max-width:580px){.lead-magnet-section{padding-block:68px}.lead-magnet-panel{padding:25px 20px}.open-house-card{padding:21px}}

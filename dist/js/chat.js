@@ -1,5 +1,6 @@
 import initSQLite from '../vendor/sqlite/index.mjs';
-import { search, structuredAnswer, extractiveAnswer, REFUSAL } from './rag.js';
+import { search, structuredAnswer, extractiveAnswer, REFUSAL } from './rag.js?v=chat-3';
+import { groundedAnswer } from './chatgpt.js?v=chat-3';
 
 const launcher = document.querySelector('#chatbot-launcher');
 const panel = document.querySelector('#chatbot-panel');
@@ -8,8 +9,67 @@ const messages = document.querySelector('#chatbot-messages');
 const form = document.querySelector('#chatbot-form');
 const input = document.querySelector('#chatbot-input');
 const suggestions = document.querySelector('#chatbot-suggestions');
+const mode = document.querySelector('#chatbot-mode');
+const settingsToggle = document.querySelector('#chatbot-settings-toggle');
+const settings = document.querySelector('#chatbot-settings');
+const keyInput = document.querySelector('#chatbot-api-key');
+const model = document.querySelector('#chatbot-model');
+const settingsStatus = document.querySelector('#chatbot-settings-status');
+const KEY_NAME = 'cb_openai_key';
 let databasePromise;
 let busy = false;
+
+function storedKey() {
+  try { return sessionStorage.getItem(KEY_NAME) || ''; }
+  catch { return ''; }
+}
+
+function showSettings() {
+  settings.hidden = false;
+  settingsToggle.setAttribute('aria-expanded', 'true');
+  keyInput.focus();
+}
+
+settingsToggle.addEventListener('click', () => {
+  if (settings.hidden) showSettings();
+  else {
+    settings.hidden = true;
+    settingsToggle.setAttribute('aria-expanded', 'false');
+    settingsToggle.focus();
+  }
+});
+
+mode.addEventListener('change', () => {
+  if (mode.value === 'chatgpt' && !storedKey()) {
+    settingsStatus.textContent = 'Enter an API key to use ChatGPT mode.';
+    showSettings();
+  }
+});
+
+settings.addEventListener('submit', event => {
+  event.preventDefault();
+  const key = keyInput.value.trim();
+  if (!key) {
+    settingsStatus.textContent = storedKey() ? 'Your key is already saved for this tab.' : 'Enter an API key first.';
+    return;
+  }
+  try {
+    sessionStorage.setItem(KEY_NAME, key);
+    keyInput.value = '';
+    settingsStatus.textContent = 'API key saved for this tab.';
+    input.focus();
+  } catch {
+    settingsStatus.textContent = 'This browser could not save the key for this tab.';
+  }
+});
+
+document.querySelector('#chatbot-clear-key').addEventListener('click', () => {
+  try { sessionStorage.removeItem(KEY_NAME); }
+  catch { /* The key was not available to this page. */ }
+  keyInput.value = '';
+  settingsStatus.textContent = 'API key cleared.';
+  keyInput.focus();
+});
 
 function openChat() {
   panel.hidden = false;
@@ -115,9 +175,26 @@ async function ask(question) {
     const db = await loadDatabase();
     const structured = structuredAnswer(db, trimmed);
     const hits = structured ? structured.hits : search(db, trimmed, 3);
-    const answer = structured?.text || extractiveAnswer(hits) || REFUSAL;
+    let answer = structured?.text || extractiveAnswer(hits) || REFUSAL;
+    let sources = hits;
+    if (mode.value === 'chatgpt' && hits.length) {
+      const key = storedKey();
+      if (key) {
+        try {
+          const result = await groundedAnswer(hits, trimmed, key, model.value);
+          answer = result.text;
+          sources = result.hits;
+        } catch (apiError) {
+          console.error('ChatGPT request failed; using search answer:', apiError);
+          answer = `ChatGPT is unavailable right now. Here is the search result:\n${answer}`;
+        }
+      } else {
+        answer = `Add an API key in Settings to use ChatGPT mode. Here is the search result:\n${answer}`;
+        showSettings();
+      }
+    }
     pending.remove();
-    addMessage('assistant', answer, hits);
+    addMessage('assistant', answer, sources);
   } catch (error) {
     console.error('Course assistant error:', error);
     pending.remove();
